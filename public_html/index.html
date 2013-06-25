@@ -1,0 +1,116 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    </head>
+    <style>
+        .editor-button{
+            border: 1px solid #C1BFC0;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            border-radius: 5px;
+            height: 38px;
+            width: 38px;
+            padding: 0px;
+            margin: 0px;
+            cursor: pointer;
+            float: left;
+            margin: 2px;
+            
+
+            background: #fcfcfc; /* Old browsers */
+            /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+            background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZjZmNmYyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNjMWJmYzAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+            background: -moz-linear-gradient(top,  #fcfcfc 0%, #c1bfc0 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fcfcfc), color-stop(100%,#c1bfc0)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  #fcfcfc 0%,#c1bfc0 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  #fcfcfc 0%,#c1bfc0 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  #fcfcfc 0%,#c1bfc0 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  #fcfcfc 0%,#c1bfc0 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#c1bfc0',GradientType=0 ); /* IE6-8 */
+                    }
+                    
+            .editor-button:hover{
+            background: #fffcfc; /* Old browsers */
+            /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+            background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmNmYyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNkNmQ2ZDYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+            background: -moz-linear-gradient(top,  #fffcfc 0%, #d6d6d6 100%); /* FF3.6+ */
+            background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fffcfc), color-stop(100%,#d6d6d6)); /* Chrome,Safari4+ */
+            background: -webkit-linear-gradient(top,  #fffcfc 0%,#d6d6d6 100%); /* Chrome10+,Safari5.1+ */
+            background: -o-linear-gradient(top,  #fffcfc 0%,#d6d6d6 100%); /* Opera 11.10+ */
+            background: -ms-linear-gradient(top,  #fffcfc 0%,#d6d6d6 100%); /* IE10+ */
+            background: linear-gradient(to bottom,  #fffcfc 0%,#d6d6d6 100%); /* W3C */
+            filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fffcfc', endColorstr='#d6d6d6',GradientType=0 ); /* IE6-8 */
+
+                        }           
+                    
+                    
+                    
+                    
+            .button-container{
+                        background: transparent url(./botones-editor.png) no-repeat;
+                        height: 32px;
+                        width: 32px;
+                        border: 0px solid red;
+                        margin: 3px 0 0 3px;
+                    }
+                    
+            .button-forward .button-container{
+                        background-position: 0px 0px; 
+                    }
+                    
+             .button-copy .button-container{
+                        background-position: -32px 0px; 
+                    }
+                    
+             .button-backward .button-container{
+                        background-position: 0px -32px; 
+                    }
+             .button-front
+             {
+                clear:left;
+             }
+             .button-front .button-container{
+                        background-position: -32px -32px; 
+                        
+                    }
+             .button-back .button-container{
+                        background-position: 0px -64px; 
+                    }
+                    
+
+                    
+                    
+    </style>
+    
+                 <!--[if gte IE 9]>
+  <style type="text/css">
+    .gradient {
+       filter: none;
+    }
+  </style>
+<![endif]-->
+    <body>
+        <div class="editor-button button-forward " title="Send to Forward">
+            <div class="button-container"></div>
+        </div>
+        
+        <div class="editor-button button-backward " title="Send to Backward">
+            <div class="button-container"></div>
+        </div>
+        <div class="editor-button button-front " title="Send to FRONT">
+            <div class="button-container"></div>
+        </div>
+        <div class="editor-button button-back " title="Send to BACK">
+            <div class="button-container"></div>
+        </div>
+        <div class="editor-button button-copy " title="Copy">
+            <div class="button-container"></div>
+        </div>
+    </body>
+</html>
