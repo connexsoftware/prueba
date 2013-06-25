@@ -1,0 +1,600 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="container" style="border: 1px solid red;height: 200px; width: 578px"></div>
+    <script src="http://d3lp1msu2r81bx.cloudfront.net/kjs/js/lib/kinetic-v4.5.4.min.js"></script>
+    <script defer="defer">
+      var stage = new Kinetic.Stage({
+        container: 'container',
+        width: 578,
+        height: 200
+      });
+      
+      
+
+
+      var colors = ['red', 'orange', 'yellow'];
+      var bordes=[2,4,6];
+      //var bordes=[0,0,0];
+      var anchuras=[50,80,120];
+
+      var layer;
+      for(var n = 0; n < 3; n++) {
+        // anonymous function to induce scope
+        (function() {
+          var i = n;
+          var box = new Kinetic.Rect({
+            
+            width: anchuras[i],
+            height: 50,
+            name: colors[i],
+            fill: colors[i],
+            stroke: 'black',
+            strokeWidth: bordes[i]
+          });
+          //group.add(box);
+          
+          layer=new Kinetic.Layer(
+                  {
+                    x: i * 30,
+                    y: i * 18,
+                    name: 'capa' + i,
+                    //dragBoundFunc: function(pos) { mueveGrupo(this, pos); return(pos);           },
+                    dragOnTop: false,
+                    draggable:true
+                    
+                }
+            );
+
+          layer.setDragBoundFunc(mueveGrupo);
+          layer.on('dragend',function(){  finDrag() });
+          layer.on('mousedown',function(evt){  activar(evt,this);})
+          layer.add(box);
+          stage.add(layer);
+
+          
+          
+        })();
+      }
+      
+    function activar(evt,objeto)
+    {
+        var layer=objeto;
+        
+        if (isVacioGrupoObjetos())
+        {
+            addObjetoGrupo(layer.getName());
+        }
+        else
+        {
+            //Para comprobar si está pulsada la tecla mayuscula
+            if (evt.shiftKey==1)
+            {
+                if (!isObjetoenGrupo(layer.getName()))
+                {
+                    addObjetoGrupo(layer.getName());
+
+
+                }   
+                else
+                {
+                    removeObjetoGrupo(layer.getName());    
+
+                }
+            }
+            else
+            {
+                if (!isObjetoenGrupo(layer.getName()))
+                {    
+                    vaciarGrupo();
+                    addObjetoGrupo(layer.getName());
+                }
+            }
+        }
+    }
+    
+   
+    
+    function desactivar()
+    {
+        
+    }
+
+    function mueveGrupo(pos)
+    {
+       // var x=document.getElementById("X");
+       // x.innerHTML=pos.x-this.getX();
+        
+        var incX=pos.x-this.getX();
+        var incY=pos.y-this.getY();
+        
+        //comprobamos que está en un grupo
+         var enc=false;
+         var i=0;
+         var layerName=this.getLayer().getName();
+         while(!enc && i<grupoObjetos.length)
+         {
+             if (grupoObjetos[i]==layerName)
+             {
+                 enc=true;
+             }
+             i++;
+         }
+         
+         if (enc)
+         {
+             var j=0;
+             var layer;
+             for (j=0;j<grupoObjetos.length;j++)
+             {
+                 if (grupoObjetos[j]!=layerName)
+                 {
+                     layer=stage.get('.' + grupoObjetos[j])[0];
+                   
+                     layer.move(incX,incY);
+                     layer.draw()
+                 }
+             }
+         }
+         
+        //Hay que devolver la posición a la funcion dragBoundFunc
+        return pos;
+    }
+    
+    
+    
+    function finDrag()
+    {
+        //Hay que repintar las capas despues de moverla porque si no no cogen los eventos
+        var layer;
+        for (i=0;i<grupoObjetos.length;i++)
+        {
+            layer=stage.get('.' + grupoObjetos[i])[0];                     
+            layer.draw();
+        }
+    }
+    
+    function addObjetoGrupo(name)
+    {
+        var enc=false;
+        var i=0;
+        while (i<grupoObjetos.length && ! enc)
+        {
+            if (grupoObjetos[i]==name)
+            {
+                enc=true;
+            }
+            i++;
+        }
+        
+        if (!enc)
+        {
+            grupoObjetos.splice(grupoObjetos.length,1,name); //Inserta un elemento en la posicion i
+            var layer=stage.get('.' + name)[0];
+            var obj=layer.getChildren()[0];
+            obj.setStroke('blue');
+            layer.draw();
+        }
+    }
+    
+    
+    function removeObjetoGrupo(name)
+    {
+        var enc=false;
+        var i=0;
+        while (i<grupoObjetos.length && ! enc)
+        {
+            if (grupoObjetos[i]==name)
+            {
+                enc=true;
+                grupoObjetos.splice(i,1); //Elimina un elemento en la posicion i
+                
+                 var layer=stage.get('.' + name)[0];
+                 var obj=layer.getChildren()[0];
+                 obj.setStroke('black');
+                 layer.draw();
+            }
+            i++;
+            
+        }
+    }
+    
+    function isObjetoenGrupo(name)
+    {
+        var enc=false;
+        var i=0;
+        while (i<grupoObjetos.length && ! enc)
+        {
+            if (grupoObjetos[i]==name)
+            {
+                enc=true;
+               
+            }
+            i++;
+            
+        }     
+        return enc;
+    }
+    
+    function isVacioGrupoObjetos()
+    {
+        return (grupoObjetos.length==0);
+    }
+    
+    function vaciarGrupo()
+    {
+        var enc=false;
+        var i=0;
+        while (i<grupoObjetos.length)
+        {
+             removeObjetoGrupo(grupoObjetos[i]);
+            
+        }     
+
+    }
+    
+    
+    
+    
+     
+     function left_align()
+     {
+         var layerName;
+         var minLeft;
+         
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setX(0);
+             layer.draw();
+             
+         }
+         else
+         {
+             minLeft=999999;
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if (layer.getX() - (obj.getStrokeWidth()/2)<minLeft)
+                {
+                    minLeft=layer.getX() - (obj.getStrokeWidth()/2)
+                }
+
+             }
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setX(minLeft + obj.getStrokeWidth()/2);
+                layer.draw();
+
+             }
+         }
+     }
+     
+     function center_align()
+     {
+         var layerName;
+         var minLeft;
+         var maxRight;
+         var maxCenter;
+         
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setX(stage.getWidth()/2- ((obj.getWidth()/2 + obj.getStrokeWidth()/2)));
+             layer.draw();
+             
+         }
+         else
+         {
+             minLeft=999999;
+             maxRight=-99999;
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if (layer.getX() - (obj.getStrokeWidth()/2)<minLeft)
+                {
+                    minLeft=layer.getX() - (obj.getStrokeWidth()/2)
+                }
+                
+                if ((layer.getX() + obj.getWidth() +  (obj.getStrokeWidth()/2))>maxRight)
+                {
+                    maxRight=layer.getX() + obj.getWidth() +  (obj.getStrokeWidth()/2);
+                }
+                
+
+             }
+             
+             maxCenter=(minLeft+maxRight)/2
+             alert('minLeft:' + minLeft + '\n' + 'maxRight:' + maxRight + '\n'  + 'maxCenter:' + maxCenter);
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setX(maxCenter - (obj.getWidth()/2 + (obj.getStrokeWidth()/2)));
+                layer.draw();
+
+             }
+         }
+     }
+     
+     function right_align()
+     {
+         var layerName;
+         var maxRight;
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setX(stage.getWidth()- (obj.getWidth() + obj.getStrokeWidth()/2));
+             layer.draw();
+             
+         }
+         else
+         {
+             maxRight=-999999;
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if ((layer.getX() + obj.getWidth() +  (obj.getStrokeWidth()/2))>maxRight)
+                {
+                    maxRight=layer.getX() + obj.getWidth() +  (obj.getStrokeWidth()/2);
+                }
+                
+
+             }
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setX(maxRight - (obj.getWidth() + (obj.getStrokeWidth()/2)));
+                layer.draw();
+
+             }
+         }
+     }
+     
+     function top_align()
+     {
+         var layerName;
+         var minTop;
+         
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setY(0 + obj.getStrokeWidth()/2);
+             layer.draw();
+             
+         }
+         else
+         {
+             minTop=999999;
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if (layer.getY() - (obj.getStrokeWidth()/2)<minTop)
+                {
+                    minTop=layer.getY() - (obj.getStrokeWidth()/2)
+                }
+
+             }
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setY(minTop + obj.getStrokeWidth()/2);
+                layer.draw();
+
+             }
+         }
+     }
+     
+     function bottom_align()
+     {
+         var layerName;
+         var maxBottom;
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setY(stage.getHeight()- (obj.getHeight() + obj.getStrokeWidth()/2));
+             layer.draw();
+             
+         }
+         else
+         {
+             maxBottom=-999999;
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if ((layer.getY() + obj.getHeight() +  (obj.getStrokeWidth()/2))>maxBottom)
+                {
+                    maxBottom=layer.getY() + obj.getHeight() +  (obj.getStrokeWidth()/2);
+                }
+                
+
+             }
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setY(maxBottom - (obj.getHeight() + (obj.getStrokeWidth()/2)));
+                layer.draw();
+
+             }
+         }
+     }
+     
+     
+     function middle_align()
+     {
+         
+         var layerName;
+         var minTop;
+         var maxBottom;
+         var maxMiddle;
+         
+         if(grupoObjetos.length==0)
+         {
+             return;
+         }
+         
+         if(grupoObjetos.length==1)
+         {
+             //Centra el objeto verticalmente en el canvas
+             layerName=grupoObjetos[0];
+             var layer=stage.get('.' + layerName)[0];
+             
+             var obj=layer.getChildren()[0];
+             layer.setY(stage.getHeight()/2- ((obj.getHeight()/2 + obj.getStrokeWidth()/2)));
+             layer.draw(); 
+         }
+         else
+         {
+             
+             minTop=999999;
+             maxBottom=-99999;
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                if (layer.getY() - (obj.getStrokeWidth()/2)<minTop)
+                {
+                    minTop=layer.getY() - (obj.getStrokeWidth()/2);
+                }
+                
+                if ((layer.getY() + obj.getHeight() +  (obj.getStrokeWidth()/2))>maxBottom)
+                {
+                    maxBottom=layer.getY() + obj.getHeight() +  (obj.getStrokeWidth()/2);
+                }
+                
+
+             }
+             
+             maxMiddle=(minTop+ maxBottom)/2;
+             
+             
+             
+             for (i=0;i<grupoObjetos.length;i++)
+             {
+                layerName=grupoObjetos[i];
+                var layer=stage.get('.' + layerName)[0];
+                var obj=layer.getChildren()[0];
+                
+                layer.setY(maxMiddle - (obj.getHeight()/2 + (obj.getStrokeWidth()/2)));
+                layer.draw();
+
+             }
+         }
+        
+     }
+     
+     
+     
+     var grupoObjetos=[];
+     
+    </script>
+  </body>
+  <span id="X"></span> ------  <span id="Y"></span>
+  <div>
+      <span id="capa0X"></span> ------  <span id="capa0Y"></span>
+  </div>
+  <input type="button" value="desagrupar" onclick="vaciarGrupo()"/>
+  <div>
+      <input type="button" value="left" onclick="left_align()"/>
+      <input type="button" value="center" onclick="center_align()"/>
+      <input type="button" value="right" onclick="right_align()"/>
+  </div>
+  
+  <div>
+      <input type="button" value="Top" onclick="top_align()"/>
+      <input type="button" value="middle" onclick="middle_align()"/>
+      <input type="button" value="Bottom" onclick="bottom_align()"/>
+  </div>
+</html>
